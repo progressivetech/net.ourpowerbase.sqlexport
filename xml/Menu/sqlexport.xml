@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/sqlexport</path>
+    <page_callback>CRM_Sqlexport_Form_SqlExport</page_callback>
+    <title>SqlExport</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+</menu>
