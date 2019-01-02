@@ -1,26 +1,19 @@
 <?xml version="1.0"?>
 <extension key="net.ourpowerbase.sqlexport" type="module">
   <file>sqlexport</file>
-  <name>FIXME</name>
-  <description>FIXME</description>
+  <name>SQL Export</name>
+  <description>Export any data by entering a raw SQL statement</description>
   <license>AGPL-3.0</license>
   <maintainer>
-    <author>FIXME</author>
-    <email>FIXME</email>
+    <author>Jamie McClelland</author>
+    <email>jamie@progressivetech.org</email>
   </maintainer>
-  <urls>
-    <url desc="Main Extension Page">http://FIXME</url>
-    <url desc="Documentation">http://FIXME</url>
-    <url desc="Support">http://FIXME</url>
-    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
-  </urls>
   <releaseDate>2019-01-02</releaseDate>
   <version>1.0</version>
   <develStage>alpha</develStage>
   <compatibility>
     <ver>5.0</ver>
   </compatibility>
-  <comments>This is a new, undeveloped module</comments>
   <civix>
     <namespace>CRM/Sqlexport</namespace>
   </civix>
