@@ -149,15 +149,15 @@ function sqlexport_civicrm_preProcess($formName, &$form) {
  * Implements hook_civicrm_navigationMenu().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
- *
+ **/
 function sqlexport_civicrm_navigationMenu(&$menu) {
-  _sqlexport_civix_insert_navigation_menu($menu, 'Mailings', array(
-    'label' => E::ts('New subliminal message'),
-    'name' => 'mailing_subliminal_message',
-    'url' => 'civicrm/mailing/subliminal',
-    'permission' => 'access CiviMail',
+  _sqlexport_civix_insert_navigation_menu($menu, 'Administer/Customize Data and Screens', array(
+    'label' => E::ts('SQL Export'),
+    'name' => 'sql_export_page',
+    'url' => 'civicrm/sqlexport',
+    'permission' => 'access CiviCRM',
     'operator' => 'OR',
     'separator' => 0,
   ));
   _sqlexport_civix_navigationMenu($menu);
-} // */
+}

@@ -30,6 +30,9 @@ class CRM_Sqlexport_Form_SqlExport extends CRM_Core_Form {
 
     // export form elements
     $this->assign('elementNames', $this->getRenderableElementNames());
+
+    $sql = Civi::settings()->get('sqlexport_lastquery', NULL);
+    $this->setDefaults(array('sql' => $sql));
     parent::buildQuickForm();
   }
 
@@ -51,6 +54,7 @@ class CRM_Sqlexport_Form_SqlExport extends CRM_Core_Form {
 
     if (!preg_match('/^SELECT (.*) FROM/i', $sql, $matches)) {
       // fail
+      return FALSE;
     }
     $this->fields = explode(',', $matches[1]);
    
@@ -72,6 +76,7 @@ class CRM_Sqlexport_Form_SqlExport extends CRM_Core_Form {
       }
       $rows[] = $row;
     }
+    Civi::settings()->set('sqlexport_lastquery', $sql);
     CRM_Core_Report_Excel::writeCSVFile('SqlExport.csv', $header, $rows);
     CRM_Utils_System::civiExit();
   }
