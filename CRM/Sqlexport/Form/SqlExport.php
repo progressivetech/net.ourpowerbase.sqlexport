@@ -50,32 +50,30 @@ class CRM_Sqlexport_Form_SqlExport extends CRM_Core_Form {
 
   public function postProcess() {
     $values = $this->exportValues();
-    $sql = $values['sql'];
+    $sql = str_replace("\n", " ", $values['sql']);
 
+    $session = CRM_Core_Session::singleton();
     if (!preg_match('/^SELECT (.*) FROM/i', $sql, $matches)) {
-      // fail
+      $session->setStatus(ts("Please ensure your SQL statement starts with SELECT."));  
       return FALSE;
     }
-    $this->fields = explode(',', $matches[1]);
-   
-    $dao = CRM_Core_DAO::executeQuery($sql);
-    $header = $this->fields;
-    while($dao->fetch()) {
-      $row = array();
-      foreach($this->fields as $field) {
-        $field = trim($field);
-        if (preg_match('/ AS (.*)/i', $field, $matches)) {
-          $field = trim($matches[1]);
-        }
-        if (property_exists($dao, $field)) {
-          $row[$field] = $dao->$field;
-        } 
-        else {
-          $row[$field] = '';
-        }
+    $init_fields = explode(',', $matches[1]);
+    foreach($init_fields as $field) {
+      $field = trim($field);
+      if (preg_match('/(.*) AS (.*)/i', $field, $matches)) {
+        $column_name = trim($matches[1]);
+        $display_name = trim($matches[2]);
       }
-      $rows[] = $row;
+      else {
+        $column_name = $display_name = $field;
+      }
+      $this->fields[$column_name] = $display_name;
     }
+    $header = array_values($this->fields);
+    $dao = CRM_Core_DAO::executeQuery($sql);
+     $rows = $dao->fetchAll(); 
+    CRM_Core_Error::debug_var('header', $header);  
+    CRM_Core_Error::debug_var('rows', $rows);  
     Civi::settings()->set('sqlexport_lastquery', $sql);
     CRM_Core_Report_Excel::writeCSVFile('SqlExport.csv', $header, $rows);
     CRM_Utils_System::civiExit();
