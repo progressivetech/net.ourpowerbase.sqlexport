@@ -72,8 +72,8 @@ class CRM_Sqlexport_Form_SqlExport extends CRM_Core_Form {
     $header = array_values($this->fields);
     $dao = CRM_Core_DAO::executeQuery($sql);
      $rows = $dao->fetchAll(); 
-    CRM_Core_Error::debug_var('header', $header);  
-    CRM_Core_Error::debug_var('rows', $rows);  
+    // CRM_Core_Error::debug_var('header', $header);  
+    // CRM_Core_Error::debug_var('rows', $rows);  
     Civi::settings()->set('sqlexport_lastquery', $sql);
     CRM_Core_Report_Excel::writeCSVFile('SqlExport.csv', $header, $rows);
     CRM_Utils_System::civiExit();
