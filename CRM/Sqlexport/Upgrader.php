@@ -15,6 +15,11 @@ class CRM_Sqlexport_Upgrader extends CRM_Sqlexport_Upgrader_Base {
     $lastquery = Civi::settings()->get('sqlexport_lastquery');
     if ($lastquery) {
       // If we had a last query, ensure it is saved and available with the name 'Default'
+      // There really should not be a sqlexport_queries variable here, but just in case...
+      $sqlexport_queries = Civi::settings()->get('sqlexport_queries');
+      if (empty($sqlexport_queries)) {
+        $sqlexport_queries = [];
+      }
       $sqlexport_queries['default'] = $lastquery;
       Civi::settings()->set('sqlexport_queries', $sqlexport_queries);
     }
