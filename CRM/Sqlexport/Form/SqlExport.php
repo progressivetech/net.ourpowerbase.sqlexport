@@ -93,7 +93,7 @@ class CRM_Sqlexport_Form_SqlExport extends CRM_Core_Form {
   public function postProcess() {
     $session = CRM_Core_Session::singleton();
     $values = $this->exportValues();
-    $sql = $values['sql'];
+    $sql = html_entity_decode($values['sql']);
     $name = $values['name'];
     $action = $values['action'];
     if ($action == 'save') {
@@ -137,9 +137,32 @@ class CRM_Sqlexport_Form_SqlExport extends CRM_Core_Form {
       $this->fields[$column_name] = $display_name;
     }
     $header = array_values($this->fields);
-    $dao = CRM_Core_DAO::executeQuery($sql);
+    $session = CRM_Core_Session::singleton();
+    try {
+      $abort = FALSE;
+      $daoName = NULL;
+      $freeDAO = FALSE;
+      $i18nRewrite = TRUE;
+      $trapException = TRUE;
+      $sql = html_entity_decode($sql);
+      $dao = CRM_Core_DAO::executeQuery($sql, [], $abort, $daoName, $freeDAO, $i18nRewrite, $trapException);
+    }
+    catch(exception $e) {
+      $session->setStatus(E::ts("There was an exception executing the query."));  
+      return FALSE;
+    }
+
+    if (is_a($dao, 'DB_Error')) {
+      $session->setStatus(E::ts("There was an error executing the query:" . $dao->userinfo));  
+      //print_r($dao);
+      return FALSE;
+    }
 
     $rows = $dao->fetchAll(); 
+    if (count($rows) == 0) {
+      $session->setStatus(E::ts("The query returned no records."));  
+      return FALSE;
+    }
     // CRM_Core_Error::debug_var('header', $header);  
     // CRM_Core_Error::debug_var('rows', $rows);  
     CRM_Core_Report_Excel::writeCSVFile('SqlExport.csv', $header, $rows);
