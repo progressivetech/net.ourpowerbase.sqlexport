@@ -120,8 +120,8 @@ class CRM_Sqlexport_Form_SqlExport extends CRM_Core_Form {
     // Otherwise we export.
     $sql = str_replace("\n", " ", $values['sql']);
 
-    if (!preg_match('/^SELECT (.*) FROM/i', $sql, $matches)) {
-      $session->setStatus(ts("Please ensure your SQL statement starts with SELECT."));  
+    if (!preg_match('/SELECT (.*) FROM/i', $sql, $matches)) {
+      $session->setStatus(ts("Please ensure your SQL statement has a SELECT clause."));  
       return FALSE;
     }
     $init_fields = explode(',', $matches[1]);
