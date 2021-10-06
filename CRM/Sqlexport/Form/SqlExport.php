@@ -81,8 +81,8 @@ class CRM_Sqlexport_Form_SqlExport extends CRM_Core_Form {
 
   public function sqlExportRules($values) {
     $sql = $values['sql'];
-    if (!preg_match('/^SELECT/i', $sql)) {
-      $errors['sql'] = 'Your sql statement must start with SELECT.';
+    if (preg_match('/^UPDATE |INSERT |DELETE /i', $sql)) {
+      $errors['sql'] = 'Your sql statement cannot have the words update, insert or delete in them.';
     }
     if (($values['action'] == 'save' || $values['action'] == 'delete') && empty($values['name'])) {
       $errors['name'] = 'Please include a name when saving or deleting a SQL statement.';
